@@ -5,8 +5,6 @@
  */
 package modelos;
 
-import java.time.LocalDate;
-
 /**
  *
  * @author elena
@@ -18,6 +16,7 @@ public class Reserva {
     private TipoReserva reserva;
     private TipoCocina tipoCocina;
     private Integer numeroJornadas;
+    private Integer numeroPersonas;
     private String fechaReserva;
     private Boolean requiereHabitacion;
     private String tipoMesa;
@@ -97,4 +96,13 @@ public class Reserva {
         this.comensalesMesa = comensalesMesa;
     }
 
+    public Integer getNumeroPersonas() {
+        return numeroPersonas;
+    }
+
+    public void setNumeroPersonas(Integer numeroPersonas) {
+        this.numeroPersonas = numeroPersonas;
+    }
+
+    
 }

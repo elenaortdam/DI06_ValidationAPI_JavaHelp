@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="ISO-8859-1"?>
+<index version="2.0">
+  <indexitem text="Busqueda" target="busqueda"/>
+  <indexitem text="Introduccion">
+    <indexitem text="Introduccion" target="Introduccion"/>
+  </indexitem>
+
+  <indexitem text="Introduccion">
+    <indexitem text="Crear una reserva" target="CrearReserva"/>
+    <indexitem text="Ver las reservas realizadas" target="ResumenReserva"/>
+  </indexitem>
+
+</index>

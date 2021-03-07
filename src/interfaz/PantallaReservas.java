@@ -8,20 +8,26 @@ package interfaz;
 import java.awt.Color;
 import java.awt.event.ItemEvent;
 import java.text.SimpleDateFormat;
+import java.util.ArrayList;
+import java.util.List;
 import javax.swing.JOptionPane;
 import modelos.Reserva;
 import modelos.TipoCocina;
 import modelos.TipoReserva;
 import modelos.Validador;
+import org.netbeans.validation.api.builtin.stringvalidation.StringValidators;
+import org.netbeans.validation.api.ui.ValidationGroup;
 
 /**
  *
  * @author elena
  */
 public class PantallaReservas extends javax.swing.JDialog {
-
+    
     private Validador validador = new Validador();
     private Reserva reserva;
+    private List<Reserva> reservas = new ArrayList<>();
+    private PantallaTablaReservas tablaReservas;
 
     /**
      * Creates new form PantallaReservas
@@ -32,6 +38,16 @@ public class PantallaReservas extends javax.swing.JDialog {
         //Ocultamos las opciones
         this.opcionesOcultas.setVisible(false);
         this.reserva = new Reserva();
+        this.setLocationRelativeTo(null);
+        PantallaPrincipal pantallaPrincipal =(PantallaPrincipal) parent;
+        tablaReservas = pantallaPrincipal.getTablaReservas();
+        ValidationGroup group = validationPanel.getValidationGroup();
+        group.add(campoNombre, StringValidators.REQUIRE_NON_EMPTY_STRING);
+        
+       // group.add(campoTelefono, StringValidators.REQUIRE_NON_NEGATIVE_NUMBER);
+        //group.add(campoTelefono, StringValidators.REQUIRE_NON_EMPTY_STRING);
+        //group.add(numeroPersonas, StringValidators.REQUIRE_NON_NEGATIVE_NUMBER);
+        //group.add(jSpinnerJornadas, StringValidators.REQUIRE_NON_NEGATIVE_NUMBER);
     }
 
     /**
@@ -72,6 +88,7 @@ public class PantallaReservas extends javax.swing.JDialog {
         radioButtonAbajo = new javax.swing.JRadioButton();
         botones = new javax.swing.JPanel();
         reservar = new javax.swing.JToggleButton();
+        validationPanel = new org.netbeans.validation.api.ui.swing.ValidationPanel();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.DISPOSE_ON_CLOSE);
 
@@ -351,13 +368,18 @@ public class PantallaReservas extends javax.swing.JDialog {
         botonesLayout.setHorizontalGroup(
             botonesLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, botonesLayout.createSequentialGroup()
-                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                .addComponent(reservar, javax.swing.GroupLayout.PREFERRED_SIZE, 109, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addContainerGap())
+                .addContainerGap()
+                .addComponent(validationPanel, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                .addComponent(reservar, javax.swing.GroupLayout.PREFERRED_SIZE, 119, javax.swing.GroupLayout.PREFERRED_SIZE))
         );
         botonesLayout.setVerticalGroup(
             botonesLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addComponent(reservar, javax.swing.GroupLayout.DEFAULT_SIZE, 33, Short.MAX_VALUE)
+            .addComponent(reservar, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, botonesLayout.createSequentialGroup()
+                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                .addComponent(validationPanel, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addContainerGap())
         );
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
@@ -444,14 +466,25 @@ public class PantallaReservas extends javax.swing.JDialog {
     private void reservarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_reservarActionPerformed
         if (this.campoNombre == null || this.campoNombre.getText().isEmpty()) {
             JOptionPane.showMessageDialog(this, "El campo nombre es obligatorio");
-        } else if (this.campoTelefono == null || this.campoTelefono.getText().isEmpty()) {
-            JOptionPane.showMessageDialog(this, "El campo telefono es obligatorio");
-        } else if (this.reserva.getReserva() == null) {
-            JOptionPane.showMessageDialog(this, "Seleccione el tipo de reserva");
-        } else {
-            JOptionPane.showMessageDialog(this, "¡Enhorabuena! La reserva se ha realizado con éxito");
+            return;
         }
-
+        if (this.campoTelefono == null || this.campoTelefono.getText().isEmpty()) {
+            JOptionPane.showMessageDialog(this, "El campo telefono es obligatorio");
+            return;
+        }
+        if (this.reserva.getReserva() == null) {
+            JOptionPane.showMessageDialog(this, "Seleccione el tipo de reserva");
+            return;
+        }
+        JOptionPane.showMessageDialog(this, "¡Enhorabuena! La reserva se ha realizado con éxito");
+        Reserva reserva = new Reserva();
+        reserva.setNombre(this.campoNombre.getText());
+        reserva.setTelefono(this.campoTelefono.getText());
+        reserva.setReserva(this.reserva.getReserva());
+        reserva.setFechaReserva(this.fechaEvento.getText());
+        reserva.setTipoCocina(TipoCocina.BUFFET);
+        reserva.setNumeroPersonas((int) this.jSpinnerNumeroPersonas.getValue());
+        this.tablaReservas.addReserva(reserva);
     }//GEN-LAST:event_reservarActionPerformed
 
     /**
@@ -461,7 +494,7 @@ public class PantallaReservas extends javax.swing.JDialog {
      */
     private void campoTelefonoInputMethodTextChanged(java.awt.event.InputMethodEvent evt) {//GEN-FIRST:event_campoTelefonoInputMethodTextChanged
         String telefono = this.campoTelefono.getText();
-
+        
         if (!validador.validarTelefono(telefono)) {
             this.telefono.setForeground(Color.red);
             JOptionPane.showMessageDialog(this, "El telefono introducido no es válido");
@@ -516,7 +549,7 @@ public class PantallaReservas extends javax.swing.JDialog {
         String telefono = this.campoTelefono.getText();
         if (telefono == null || telefono.isEmpty()) {
             JOptionPane.showMessageDialog(this, "El telefono es obligatorio");
-
+            
         }
 
      }//GEN-LAST:event_campoTelefonoFocusLost
@@ -528,7 +561,7 @@ public class PantallaReservas extends javax.swing.JDialog {
      */
     private void campoNombreActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_campoNombreActionPerformed
         final String nombre = this.campoNombre.getText();
-
+        
         if (!validador.validarNombre(nombre)) {
             this.campoNombre.setForeground(Color.red);
             JOptionPane.showMessageDialog(this, "El nombre introducido no es válido");
@@ -570,6 +603,40 @@ public class PantallaReservas extends javax.swing.JDialog {
     private javax.swing.JLabel textoSpinnerOculto;
     private javax.swing.JLabel tipoCocina;
     private javax.swing.JLabel tipoEvento;
+    private org.netbeans.validation.api.ui.swing.ValidationPanel validationPanel;
     private org.jdesktop.beansbinding.BindingGroup bindingGroup;
     // End of variables declaration//GEN-END:variables
+
+    public static void main(String args[]) {
+        /* Set the Nimbus look and feel */
+        //<editor-fold defaultstate="collapsed" desc=" Look and feel setting code (optional) ">
+        /* If Nimbus (introduced in Java SE 6) is not available, stay with the default look and feel.
+         * For details see http://download.oracle.com/javase/tutorial/uiswing/lookandfeel/plaf.html 
+         */
+        try {
+            for (javax.swing.UIManager.LookAndFeelInfo info : javax.swing.UIManager.getInstalledLookAndFeels()) {
+                if ("Nimbus".equals(info.getName())) {
+                    javax.swing.UIManager.setLookAndFeel(info.getClassName());
+                    break;
+                }
+            }
+        } catch (ClassNotFoundException ex) {
+            java.util.logging.Logger.getLogger(PantallaPrincipal.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
+        } catch (InstantiationException ex) {
+            java.util.logging.Logger.getLogger(PantallaPrincipal.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
+        } catch (IllegalAccessException ex) {
+            java.util.logging.Logger.getLogger(PantallaPrincipal.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
+        } catch (javax.swing.UnsupportedLookAndFeelException ex) {
+            java.util.logging.Logger.getLogger(PantallaPrincipal.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
+        }
+        //</editor-fold>
+
+        /* Create and display the form */
+        java.awt.EventQueue.invokeLater(new Runnable() {
+            public void run() {
+                new PantallaReservas(new PantallaPrincipal(), true).setVisible(true);
+            }
+        });
+    }
+    
 }
