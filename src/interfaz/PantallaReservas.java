@@ -23,7 +23,7 @@ import org.netbeans.validation.api.ui.ValidationGroup;
  * @author elena
  */
 public class PantallaReservas extends javax.swing.JDialog {
-    
+
     private Validador validador = new Validador();
     private Reserva reserva;
     private List<Reserva> reservas = new ArrayList<>();
@@ -39,15 +39,14 @@ public class PantallaReservas extends javax.swing.JDialog {
         this.opcionesOcultas.setVisible(false);
         this.reserva = new Reserva();
         this.setLocationRelativeTo(null);
-        PantallaPrincipal pantallaPrincipal =(PantallaPrincipal) parent;
+        PantallaPrincipal pantallaPrincipal = (PantallaPrincipal) parent;
         tablaReservas = pantallaPrincipal.getTablaReservas();
         ValidationGroup group = validationPanel.getValidationGroup();
         group.add(campoNombre, StringValidators.REQUIRE_NON_EMPTY_STRING);
-        
-       // group.add(campoTelefono, StringValidators.REQUIRE_NON_NEGATIVE_NUMBER);
-        //group.add(campoTelefono, StringValidators.REQUIRE_NON_EMPTY_STRING);
-        //group.add(numeroPersonas, StringValidators.REQUIRE_NON_NEGATIVE_NUMBER);
-        //group.add(jSpinnerJornadas, StringValidators.REQUIRE_NON_NEGATIVE_NUMBER);
+        group.add(campoTelefono, StringValidators.REQUIRE_VALID_NUMBER,
+                StringValidators.REQUIRE_VALID_NUMBER,
+                StringValidators.REQUIRE_NON_EMPTY_STRING);
+       // group.add(numeroPersonas, StringValidators.REQUIRE_NON_NEGATIVE_NUMBER);
     }
 
     /**
@@ -99,6 +98,7 @@ public class PantallaReservas extends javax.swing.JDialog {
         nombre.setName("Nombre con el que desea realizar la reserva"); // NOI18N
 
         campoNombre.setToolTipText("Introduzca su nombre...");
+        campoNombre.setName("Nombre"); // NOI18N
         campoNombre.addFocusListener(new java.awt.event.FocusAdapter() {
             public void focusLost(java.awt.event.FocusEvent evt) {
                 campoNombreFocusLost(evt);
@@ -115,6 +115,7 @@ public class PantallaReservas extends javax.swing.JDialog {
         telefono.setToolTipText("Teléfono de contacto");
 
         campoTelefono.setToolTipText("Introduzca su teléfono...");
+        campoTelefono.setName("Teléfono"); // NOI18N
         campoTelefono.addFocusListener(new java.awt.event.FocusAdapter() {
             public void focusLost(java.awt.event.FocusEvent evt) {
                 campoTelefonoFocusLost(evt);
@@ -212,6 +213,7 @@ public class PantallaReservas extends javax.swing.JDialog {
         numeroPersonas.setText("Nº Personas:");
 
         jSpinnerNumeroPersonas.setModel(new javax.swing.SpinnerNumberModel(1, 1, null, 1));
+        jSpinnerNumeroPersonas.setName("Número personas"); // NOI18N
 
         tipoCocina.setFont(new java.awt.Font("Segoe UI", 0, 12)); // NOI18N
         tipoCocina.setText("Tipo de cocina:");
@@ -482,7 +484,7 @@ public class PantallaReservas extends javax.swing.JDialog {
         reserva.setTelefono(this.campoTelefono.getText());
         reserva.setReserva(this.reserva.getReserva());
         reserva.setFechaReserva(this.fechaEvento.getText());
-        reserva.setTipoCocina(TipoCocina.BUFFET);
+        reserva.setTipoCocina(TipoCocina.valueOf((String) this.jComboBoxTipoCocina.getSelectedItem()));
         reserva.setNumeroPersonas((int) this.jSpinnerNumeroPersonas.getValue());
         this.tablaReservas.addReserva(reserva);
     }//GEN-LAST:event_reservarActionPerformed
@@ -494,7 +496,7 @@ public class PantallaReservas extends javax.swing.JDialog {
      */
     private void campoTelefonoInputMethodTextChanged(java.awt.event.InputMethodEvent evt) {//GEN-FIRST:event_campoTelefonoInputMethodTextChanged
         String telefono = this.campoTelefono.getText();
-        
+
         if (!validador.validarTelefono(telefono)) {
             this.telefono.setForeground(Color.red);
             JOptionPane.showMessageDialog(this, "El telefono introducido no es válido");
@@ -549,7 +551,7 @@ public class PantallaReservas extends javax.swing.JDialog {
         String telefono = this.campoTelefono.getText();
         if (telefono == null || telefono.isEmpty()) {
             JOptionPane.showMessageDialog(this, "El telefono es obligatorio");
-            
+
         }
 
      }//GEN-LAST:event_campoTelefonoFocusLost
@@ -561,7 +563,7 @@ public class PantallaReservas extends javax.swing.JDialog {
      */
     private void campoNombreActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_campoNombreActionPerformed
         final String nombre = this.campoNombre.getText();
-        
+
         if (!validador.validarNombre(nombre)) {
             this.campoNombre.setForeground(Color.red);
             JOptionPane.showMessageDialog(this, "El nombre introducido no es válido");
@@ -638,5 +640,5 @@ public class PantallaReservas extends javax.swing.JDialog {
             }
         });
     }
-    
+
 }

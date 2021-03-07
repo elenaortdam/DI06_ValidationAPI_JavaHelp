@@ -126,6 +126,7 @@
         <Component class="javax.swing.JTextField" name="campoNombre">
           <Properties>
             <Property name="toolTipText" type="java.lang.String" value="Introduzca su nombre..."/>
+            <Property name="name" type="java.lang.String" value="Nombre" noResource="true"/>
           </Properties>
           <Events>
             <EventHandler event="focusLost" listener="java.awt.event.FocusListener" parameters="java.awt.event.FocusEvent" handler="campoNombreFocusLost"/>
@@ -147,6 +148,7 @@
         <Component class="javax.swing.JTextField" name="campoTelefono">
           <Properties>
             <Property name="toolTipText" type="java.lang.String" value="Introduzca su tel&#xe9;fono..."/>
+            <Property name="name" type="java.lang.String" value="Tel&#xe9;fono" noResource="true"/>
           </Properties>
           <Events>
             <EventHandler event="focusLost" listener="java.awt.event.FocusListener" parameters="java.awt.event.FocusEvent" handler="campoTelefonoFocusLost"/>
@@ -365,6 +367,7 @@
                     <Property name="model" type="javax.swing.SpinnerModel" editor="org.netbeans.modules.form.editors2.SpinnerModelEditor">
                       <SpinnerModel initial="1" minimum="1" numberType="java.lang.Integer" stepSize="1" type="number"/>
                     </Property>
+                    <Property name="name" type="java.lang.String" value="N&#xfa;mero personas" noResource="true"/>
                   </Properties>
                 </Component>
                 <Component class="javax.swing.JLabel" name="tipoCocina">
