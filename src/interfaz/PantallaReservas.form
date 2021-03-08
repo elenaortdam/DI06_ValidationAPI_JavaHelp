@@ -129,7 +129,6 @@
             <Property name="name" type="java.lang.String" value="Nombre" noResource="true"/>
           </Properties>
           <Events>
-            <EventHandler event="focusLost" listener="java.awt.event.FocusListener" parameters="java.awt.event.FocusEvent" handler="campoNombreFocusLost"/>
             <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="campoNombreActionPerformed"/>
           </Events>
         </Component>
@@ -218,7 +217,7 @@
                           </Group>
                           <Group type="102" alignment="0" attributes="0">
                               <Component id="panelDatosEvento" min="-2" max="-2" attributes="0"/>
-                              <EmptySpace pref="20" max="32767" attributes="0"/>
+                              <EmptySpace pref="55" max="32767" attributes="0"/>
                           </Group>
                       </Group>
                   </Group>
@@ -350,9 +349,6 @@
                     </Property>
                     <Property name="toolTipText" type="java.lang.String" value="Fecha en la que se celebrar&#xe1; el evento"/>
                   </Properties>
-                  <Events>
-                    <EventHandler event="stateChanged" listener="javax.swing.event.ChangeListener" parameters="javax.swing.event.ChangeEvent" handler="jSpinnerFechaEventoStateChanged"/>
-                  </Events>
                 </Component>
                 <Component class="javax.swing.JLabel" name="numeroPersonas">
                   <Properties>
@@ -382,16 +378,13 @@
                   <Properties>
                     <Property name="model" type="javax.swing.ComboBoxModel" editor="org.netbeans.modules.form.editors2.ComboBoxModelEditor">
                       <StringArray count="4">
-                        <StringItem index="0" value="Buffet"/>
-                        <StringItem index="1" value="Carta"/>
-                        <StringItem index="2" value="Pedir cita con el chef"/>
-                        <StringItem index="3" value="No precisa"/>
+                        <StringItem index="0" value="BUFFET"/>
+                        <StringItem index="1" value="CARTA"/>
+                        <StringItem index="2" value="CHEFF"/>
+                        <StringItem index="3" value="NO_PRECISA"/>
                       </StringArray>
                     </Property>
                   </Properties>
-                  <Events>
-                    <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="jComboBoxTipoCocinaActionPerformed"/>
-                  </Events>
                   <AuxValues>
                     <AuxValue name="JavaCodeGenerator_TypeParameters" type="java.lang.String" value="&lt;String&gt;"/>
                   </AuxValues>

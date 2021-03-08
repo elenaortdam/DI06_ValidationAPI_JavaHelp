@@ -30,9 +30,12 @@ public class Validador {
     }
 
     public boolean validarTelefono(String telefono) {
-        boolean valido = false;
+        boolean valido = true;
         if (telefono == null || telefono.isEmpty()) {
-            return valido;
+            return !valido;
+        }
+        if(telefono.length() < 9){
+            return !valido;
         }
         try {
             Pattern pat = Pattern.compile("^(0034|\\+34)?(\\d\\d\\d)-? ?(\\d\\d)-? ?(\\d)-? ?(\\d)-? ?(\\d\\d)$");

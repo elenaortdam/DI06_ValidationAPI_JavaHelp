@@ -10,10 +10,10 @@ package modelos;
  * @author elena
  */
 public enum TipoCocina {
-    NO_PRECISA("No precisa"),
-    BUFFET("Buffet"),
-    CARTA("Carta"),
-    CHEF("Pedir cita con el chef");
+    NO_PRECISA("NO_PRECISA"),
+    BUFFET("BUFFET"),
+    CARTA("CARTA"),
+    CHEF("CHEF");
     
     private String nombre;
 

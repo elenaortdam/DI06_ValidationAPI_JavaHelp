@@ -44,9 +44,7 @@ public class PantallaReservas extends javax.swing.JDialog {
         ValidationGroup group = validationPanel.getValidationGroup();
         group.add(campoNombre, StringValidators.REQUIRE_NON_EMPTY_STRING);
         group.add(campoTelefono, StringValidators.REQUIRE_VALID_NUMBER,
-                StringValidators.REQUIRE_VALID_NUMBER,
                 StringValidators.REQUIRE_NON_EMPTY_STRING);
-       // group.add(numeroPersonas, StringValidators.REQUIRE_NON_NEGATIVE_NUMBER);
     }
 
     /**
@@ -99,11 +97,6 @@ public class PantallaReservas extends javax.swing.JDialog {
 
         campoNombre.setToolTipText("Introduzca su nombre...");
         campoNombre.setName("Nombre"); // NOI18N
-        campoNombre.addFocusListener(new java.awt.event.FocusAdapter() {
-            public void focusLost(java.awt.event.FocusEvent evt) {
-                campoNombreFocusLost(evt);
-            }
-        });
         campoNombre.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 campoNombreActionPerformed(evt);
@@ -203,11 +196,6 @@ public class PantallaReservas extends javax.swing.JDialog {
 
         jSpinnerFechaEvento.setModel(new javax.swing.SpinnerDateModel(new java.util.Date(), new java.util.Date(), new java.util.Date(1635669840000L), java.util.Calendar.DAY_OF_MONTH));
         jSpinnerFechaEvento.setToolTipText("Fecha en la que se celebrará el evento");
-        jSpinnerFechaEvento.addChangeListener(new javax.swing.event.ChangeListener() {
-            public void stateChanged(javax.swing.event.ChangeEvent evt) {
-                jSpinnerFechaEventoStateChanged(evt);
-            }
-        });
 
         numeroPersonas.setFont(new java.awt.Font("Segoe UI", 0, 12)); // NOI18N
         numeroPersonas.setText("Nº Personas:");
@@ -218,12 +206,7 @@ public class PantallaReservas extends javax.swing.JDialog {
         tipoCocina.setFont(new java.awt.Font("Segoe UI", 0, 12)); // NOI18N
         tipoCocina.setText("Tipo de cocina:");
 
-        jComboBoxTipoCocina.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "Buffet", "Carta", "Pedir cita con el chef", "No precisa" }));
-        jComboBoxTipoCocina.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                jComboBoxTipoCocinaActionPerformed(evt);
-            }
-        });
+        jComboBoxTipoCocina.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "BUFFET", "CARTA", "CHEFF", "NO_PRECISA" }));
 
         javax.swing.GroupLayout panelDatosEventoLayout = new javax.swing.GroupLayout(panelDatosEvento);
         panelDatosEvento.setLayout(panelDatosEventoLayout);
@@ -279,7 +262,7 @@ public class PantallaReservas extends javax.swing.JDialog {
                         .addGap(26, 26, 26))
                     .addGroup(panelTipoEventoLayout.createSequentialGroup()
                         .addComponent(panelDatosEvento, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addContainerGap(20, Short.MAX_VALUE))))
+                        .addContainerGap(55, Short.MAX_VALUE))))
         );
         panelTipoEventoLayout.setVerticalGroup(
             panelTipoEventoLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -469,24 +452,34 @@ public class PantallaReservas extends javax.swing.JDialog {
         if (this.campoNombre == null || this.campoNombre.getText().isEmpty()) {
             JOptionPane.showMessageDialog(this, "El campo nombre es obligatorio");
             return;
+        } else {
+            if (!validador.validarNombre(this.campoNombre.getText())) {
+                JOptionPane.showMessageDialog(this, "El campo nombre no es válido");
+                return;
+            }
         }
         if (this.campoTelefono == null || this.campoTelefono.getText().isEmpty()) {
             JOptionPane.showMessageDialog(this, "El campo telefono es obligatorio");
             return;
+        } else {
+            if (!validador.validarTelefono(campoTelefono.getText())) {
+                JOptionPane.showMessageDialog(this, "El  telefono introducido no es válido");
+                return;
+            }
         }
         if (this.reserva.getReserva() == null) {
             JOptionPane.showMessageDialog(this, "Seleccione el tipo de reserva");
             return;
         }
-        JOptionPane.showMessageDialog(this, "¡Enhorabuena! La reserva se ha realizado con éxito");
         Reserva reserva = new Reserva();
         reserva.setNombre(this.campoNombre.getText());
         reserva.setTelefono(this.campoTelefono.getText());
         reserva.setReserva(this.reserva.getReserva());
-        reserva.setFechaReserva(this.fechaEvento.getText());
+        reserva.setFechaReserva(new SimpleDateFormat("yyyy/MM/dd").format(this.jSpinnerFechaEvento.getValue()));
         reserva.setTipoCocina(TipoCocina.valueOf((String) this.jComboBoxTipoCocina.getSelectedItem()));
         reserva.setNumeroPersonas((int) this.jSpinnerNumeroPersonas.getValue());
         this.tablaReservas.addReserva(reserva);
+        JOptionPane.showMessageDialog(this, "¡Enhorabuena! La reserva se ha realizado con éxito");
     }//GEN-LAST:event_reservarActionPerformed
 
     /**
@@ -507,10 +500,6 @@ public class PantallaReservas extends javax.swing.JDialog {
         }
     }//GEN-LAST:event_campoTelefonoInputMethodTextChanged
 
-    private void campoNombreFocusLost(java.awt.event.FocusEvent evt) {//GEN-FIRST:event_campoNombreFocusLost
-
-    }//GEN-LAST:event_campoNombreFocusLost
-
     /**
      * Completamos el dato tipo de reserva
      *
@@ -521,26 +510,6 @@ public class PantallaReservas extends javax.swing.JDialog {
             this.reserva.setReserva(TipoReserva.JORNADA);
         }
     }//GEN-LAST:event_jornadaItemStateChanged
-
-    /**
-     * Completamos la fecha de reserva
-     *
-     * @param evt modificación de los datos del spinner de fecha
-     */
-    private void jSpinnerFechaEventoStateChanged(javax.swing.event.ChangeEvent evt) {//GEN-FIRST:event_jSpinnerFechaEventoStateChanged
-        this.reserva.setFechaReserva(new SimpleDateFormat("yyyy/MM/dd").format(this.jSpinnerFechaEvento.getValue()));
-    }//GEN-LAST:event_jSpinnerFechaEventoStateChanged
-
-    /**
-     * Completamos el dato "Tipo de cocina" a partir de lo seleccionado por el
-     * usuario
-     *
-     * @param evt acción efectuada por el usuario en el combo box de "tipo de
-     * cocina"
-     */
-    private void jComboBoxTipoCocinaActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jComboBoxTipoCocinaActionPerformed
-        this.reserva.setTipoCocina(TipoCocina.valueOf((String) this.jComboBoxTipoCocina.getSelectedItem()));
-    }//GEN-LAST:event_jComboBoxTipoCocinaActionPerformed
 
     /**
      * Si se quita el foco sobre el campo teléfono comprobamos que no está vacío
